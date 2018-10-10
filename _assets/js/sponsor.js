@@ -1,4 +1,4 @@
-/* Randomly choose a sponsor to show in the sidebar. */
+/* Randomize the sponsors and show them with a carousel in the sidebar. */
 
 var sponsors = [
 	[
@@ -24,13 +24,23 @@ var sponsors = [
 ];
 
 $(document).ready(function(){
-	var sponsor_num = Math.floor( Math.random() * sponsors.length );
+	sponsors.sort(function () { return 0.5 - Math.random(); });
+	
+	$.each(sponsors, function (index, sponsor) {
+		var element = $('<div class="carousel-item">'+
+			'<a target="_new" href="'+sponsor[1]+'">'+
+			'<img class="mx-auto d-block" src="/assets/img/logos/' +
+			sponsor[2] + '" alt="' + sponsor[0] + '" />'+
+			'</a></div>');
 
-	$('div.logos .card-body').html(' \
-		<a href="' + sponsors[sponsor_num][1] + '" target="_new"> \
-			<img src="/assets/img/logos/' + sponsors[sponsor_num][2] + '" alt="' + sponsors[sponsor_num][0] + '" /> \
-		</a> \
-    ');
+		if (index === 0)
+			element.addClass("active");   
 
-    $('div.logos').show();
+		element.appendTo("#carouselSponsorsInner");
+	});
+	$('#carouselSponsors').carousel({
+		interval: 5000
+	});
+
+	$('div.logos').show();
 });
